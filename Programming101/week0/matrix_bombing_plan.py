@@ -26,3 +26,11 @@ def matrix_bombing_plan(m):
             matrix = copy.deepcopy(m)
             result[(y, x)] = blow_bomb(matrix, (x, y))
     return result
+
+
+def main():
+    matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    print(matrix_bombing_plan(matrix))
+
+if __name__ == '__main__':
+    main()

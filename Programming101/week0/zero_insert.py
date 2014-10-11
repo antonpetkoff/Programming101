@@ -11,3 +11,14 @@ def zero_insert(n):
             result += str(digits[i-1])
     result += str(digits[len(digits) - 1])
     return int(result)
+
+
+def main():
+    print(zero_insert(116457))
+    print(zero_insert(55555555))
+    print(zero_insert(1))
+    print(zero_insert(6446))
+
+
+if __name__ == '__main__':
+    main()

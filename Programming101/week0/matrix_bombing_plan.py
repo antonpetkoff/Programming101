@@ -29,8 +29,10 @@ def matrix_bombing_plan(m):
 
 
 def main():
-    matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-    print(matrix_bombing_plan(matrix))
+    m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    print(matrix_bombing_plan(m))
+    m2 = [[4,8,3], [5,2,7], [3, 9, 6]]
+    print(matrix_bombing_plan(m2))
 
 if __name__ == '__main__':
     main()

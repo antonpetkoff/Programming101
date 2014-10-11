@@ -7,3 +7,12 @@ def count_words(arr):
         else:
             result[word] = 1
     return result
+
+
+def main():
+    print(count_words(["apple", "banana", "apple", "pie"]))
+    print(count_words(["python", "python", "python", "ruby"]))
+
+
+if __name__ == '__main__':
+    main()

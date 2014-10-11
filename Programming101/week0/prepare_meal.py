@@ -16,3 +16,16 @@ def prepare_meal(number):
         return "eggs"
     else:
         return ""
+
+
+def main():
+    print(prepare_meal(5))
+    print(prepare_meal(3))
+    print(prepare_meal(27))
+    print(prepare_meal(15))
+    print(prepare_meal(45))
+    print(prepare_meal(7))
+
+
+if __name__ == '__main__':
+    main()

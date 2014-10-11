@@ -11,3 +11,12 @@ def calculate_coins(sum):
         else:
             index += 1
     return result
+
+
+def main():
+    print(calculate_coins(0.53))
+    print(calculate_coins(8.94))
+
+
+if __name__ == '__main__':
+    main()

@@ -9,3 +9,17 @@ def is_number_balanced(n):
         sumLeft += int(digits[i])
         sumRight += int(digits[length - i - 1])
     return True if sumLeft == sumRight else False
+
+
+def main():
+    print(is_number_balanced(9))
+    print(is_number_balanced(11))
+    print(is_number_balanced(13))
+    print(is_number_balanced(121))
+    print(is_number_balanced(4518))
+    print(is_number_balanced(28471))
+    print(is_number_balanced(1238033))
+
+
+if __name__ == '__main__':
+    main()

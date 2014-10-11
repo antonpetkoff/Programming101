@@ -19,3 +19,13 @@ def next_hack(n):
     while(not is_hack_number(n)):
         n += 1
     return n
+
+
+def main():
+    print(next_hack(0))
+    print(next_hack(10))
+    print(next_hack(8031))
+
+
+if __name__ == '__main__':
+    main()

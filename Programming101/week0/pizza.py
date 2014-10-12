@@ -17,7 +17,8 @@ def pizza():
     order = {}
     orderNames = []     # without *.txt extension
     isListCalled = False
-    isLastOrderSaved = False
+    isLastOrderSaved = True
+    finishCount = 0
 
     while True:
         command = input("Enter command>")
@@ -81,11 +82,17 @@ def pizza():
                     order = loadOrder(orderNames[int(args[1]) - 1])
                     isLastOrderSaved = True
         elif command == "finish":
+            if finishCount == 1:
+                print("Finishing order. Goodbye!")
+                return
             if not isLastOrderSaved:
                 print("You have not saved your order.")
                 print("If you wish to continue, type finish again.")
                 print("If you want to save your order, type save")
-            return
+                finishCount = 1
+            else:
+                print("Finishing order. Goodbye!")
+                return
         else:
             print("Unknown command!\nTry one of the following:")
             print("take <name> <price>\nstatus\nsave")

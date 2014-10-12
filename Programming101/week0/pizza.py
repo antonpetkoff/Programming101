@@ -2,9 +2,15 @@ from time import time
 from datetime import datetime
 
 
-def loadOrder(filename, orderDict):
-    with open(filename, "r") as readFile:
-        pass
+def loadOrder(orderName):
+    order = {}
+    with open(orderName + ".txt", "r") as readFile:
+        lines = readFile.readlines()
+        for line in lines:
+            items = line.split(" ")
+            order[items[0]] = float(items[2])
+        print(order)
+    return order
 
 
 def pizza():
@@ -59,16 +65,26 @@ def pizza():
                     print("Incorrect \"load\" command! No argument!")
                     continue
 
+                if int(args[1]) > len(orderNames):
+                    print("Incorrect load ID!")
+                    continue
+
                 if not isLastOrderSaved:
                     print("You have not saved the current order.")
                     print("If you wish to discard it,")
                     print("type load <number> again.")
                     newCommand = input("Enter command>")
                     if newCommand == command:
-                        loadOrder(orderNames[int(args[1]) - 1], order)
+                        order = loadOrder(orderNames[int(args[1]) - 1])
+                        isLastOrderSaved = True
                 else:
-                    loadOrder(orderNames[int(args[1]) - 1], order)
+                    order = loadOrder(orderNames[int(args[1]) - 1])
+                    isLastOrderSaved = True
         elif command == "finish":
+            if not isLastOrderSaved:
+                print("You have not saved your order.")
+                print("If you wish to continue, type finish again.")
+                print("If you want to save your order, type save")
             return
         else:
             print("Unknown command!\nTry one of the following:")

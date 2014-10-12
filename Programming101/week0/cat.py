@@ -2,7 +2,10 @@ import sys
 
 
 def cat(filename):
-    return open(filename).read()
+    readFile = open(filename, "r")
+    result = readFile.read()
+    readFile.close()
+    return result
 
 
 def main():

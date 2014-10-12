@@ -4,9 +4,11 @@ import sys
 def cat2(filenames):
     result = ""
     for i in range(len(filenames)):
-        result += open(filenames[i], "r").read()
+        readFile = open(filenames[i], "r")
+        result += readFile.read()
         if i != len(filenames) - 1:
             result += '\n'
+        readFile.close()
     return result
 
 

@@ -25,6 +25,8 @@ class Smartphone(Product):
 
 class Store(object):
 
+    income = 0
+
     def __init__(self, name):
         self.name = name
         self.products = {}
@@ -42,7 +44,16 @@ class Store(object):
             if isinstance(key, product_type):
                 print(key.name + " - " + str(self.products[key]))
 
-    def
+    def sell_product(self, product):
+        for key in self.products.keys():
+            if key == product and self.products[key] > 0:
+                Store.income += key.profit()
+                self.products[key] -= 1
+                return True
+        return False
+
+    def total_income(self):
+        return Store.income
 
 def main():
     new_product = Product('HP HackBook', 1000, 1243)
@@ -51,10 +62,14 @@ def main():
     store = Store('Laptop.bg')
     smarthphone = Smartphone('Hack Phone', 500, 820, 7, 10)
     laptop = Laptop('HP HackBook', 1000, 1243, 1000, 4)
-    store.load_new_products(smarthphone, 20)
     store.load_new_products(laptop, 10)
-
     store.list_products(Laptop)
+
+    store.load_new_products(smarthphone, 2)
+    print(store.sell_product(smarthphone)) # True
+    print(store.sell_product(smarthphone)) # True
+    print(store.sell_product(smarthphone)) # False
+    print(store.total_income())
 
 if __name__ == '__main__':
     main()

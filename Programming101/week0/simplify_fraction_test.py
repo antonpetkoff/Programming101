@@ -10,7 +10,7 @@ class SimplifyFractionsTests(unittest.TestCase):
         self.assertEqual((2, 5), simplify_fraction((4, 10)))
         self.assertEqual((3, 22), simplify_fraction((63, 462)))
 
-    def test_division_by_zero(self):
+    def test_zero_denominator(self):
         with self.assertRaises(ZeroDivisionError):
             simplify_fraction((0, 0))
 

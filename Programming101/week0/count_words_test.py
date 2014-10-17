@@ -1,6 +1,7 @@
 import unittest
 from count_words import count_words
 
+
 class CountWordsTests(unittest.TestCase):
 
     def test_unique_words(self):

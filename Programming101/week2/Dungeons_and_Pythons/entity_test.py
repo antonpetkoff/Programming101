@@ -51,5 +51,8 @@ class TestEntity(unittest.TestCase):
         self.assertFalse(self.entity.take_healing(90))
         self.assertEqual(0, self.entity.get_health())
 
+    def test_has_weapon(self):
+        
+
 if __name__ == '__main__':
     unittest.main()

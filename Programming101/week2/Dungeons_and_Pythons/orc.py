@@ -1,4 +1,5 @@
 from entity import Entity
+from weapon import Weapon
 
 
 class Orc(Entity):
@@ -12,3 +13,9 @@ class Orc(Entity):
             self.berserk_factor = 1
         else:
             self.berserk_factor = berserk_factor
+
+    def attack(self):
+        if isinstance(self.weapon, Weapon):
+            return self.weapon.damage * self.berserk_factor
+        else:
+            return 0

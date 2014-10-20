@@ -3,10 +3,9 @@ from random import randint
 
 
 def generate_numbers(fileName, n):
-    writeFile = open(fileName, "w")
-    for i in range(n):
-        writeFile.write(str(randint(1, 1000)) + " ")
-    writeFile.close()
+    with open(fileName, "w") as writeFile:
+        for i in range(n):
+            writeFile.write(str(randint(1, 1000)) + " ")
 
 
 def main():

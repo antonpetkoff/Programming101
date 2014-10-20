@@ -10,8 +10,8 @@ class GenerateNumbersTests(unittest.TestCase):
     def test_cases(self):
         fileName = str(uuid4())
         numCount = randint(100, 10000)
-        generate_numbers(fileName, numCount)
         numCount_afterCall = 0
+        generate_numbers(fileName, numCount)
 
         with open(fileName, "r") as readFile:
             numbers = readFile.read().split(" ")

@@ -2,8 +2,8 @@ import sys
 from random import randint
 
 
-def generate_numbers(filename, n):
-    writeFile = open(filename, "w")
+def generate_numbers(fileName, n):
+    writeFile = open(fileName, "w")
     for i in range(n):
         writeFile.write(str(randint(1, 1000)) + " ")
     writeFile.close()

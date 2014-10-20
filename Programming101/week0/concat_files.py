@@ -1,20 +1,21 @@
 import sys
 
 
-def concat_files(filenames):
-    writeFile = open("MEGATRON.txt", "a")
-    for i in range(len(filenames)):
-        readFile = open(filenames[i], "r")
-        writeFile.write(readFile.read() + '\n')
-        readFile.close()
-    writeFile.close()
+def concat_files(fileNames):
+    with open("MEGATRON.txt", "a") as writeFile:
+        for i in range(len(fileNames)):
+            try:
+                with open(fileNames[i], "r") as readFile:
+                    writeFile.write(readFile.read())
+            except FileNotFoundError:
+                raise
 
 
 def main():
-    filenames = []
+    fileNames = []
     for i in range(1, len(sys.argv)):
-        filenames.append(sys.argv[i])
-    concat_files(filenames)
+        fileNames.append(sys.argv[i])
+    concat_files(fileNames)
 
 
 if __name__ == '__main__':

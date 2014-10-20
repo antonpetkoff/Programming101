@@ -8,7 +8,7 @@ def cat2(fileNames):
             with open(fileNames[i], "r") as readFile:
                 result += readFile.read()
         except FileNotFoundError:
-            raise FileNotFoundError(fileNames[i])
+            raise
     return result
 
 

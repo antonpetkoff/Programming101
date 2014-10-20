@@ -2,9 +2,12 @@ import sys
 
 
 def cat(filename):
-    readFile = open(filename, "r")
-    result = readFile.read()
-    readFile.close()
+    result = ""
+    try:
+        with open(filename, "r") as readFile:
+            result = readFile.read()
+    except FileNotFoundError:
+        return "File {} not found!".format(filename)
     return result
 
 

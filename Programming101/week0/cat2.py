@@ -7,10 +7,8 @@ def cat2(fileNames):
         try:
             with open(fileNames[i], "r") as readFile:
                 result += readFile.read()
-                if i != len(fileNames) - 1:     # split with newlines
-                    result += '\n'
         except FileNotFoundError:
-            return "File {} not found!".format(fileNames[i])
+            raise FileNotFoundError(fileNames[i])
     return result
 
 

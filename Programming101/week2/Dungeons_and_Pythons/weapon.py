@@ -15,7 +15,7 @@ class Weapon:
             raise ValueError
 
     def critical_hit(self):
-        if random() <= 0.6:
+        if random() <= self.critical_strike_percent:
             return True
         else:
             return False

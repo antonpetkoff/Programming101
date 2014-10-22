@@ -29,6 +29,5 @@ class TestOrc(unittest.TestCase):
     def test_attack_berserk_without_weapon(self):
         self.assertEqual(0, self.orc.attack())
 
-
 if __name__ == '__main__':
     unittest.main()

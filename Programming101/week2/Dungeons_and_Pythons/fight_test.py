@@ -19,5 +19,6 @@ class TestFight(unittest.TestCase):
         self.fight.simulate_fight()
         self.assertTrue(not self.orc.is_alive() or not self.hero.is_alive())
 
+
 if __name__ == '__main__':
     unittest.main()

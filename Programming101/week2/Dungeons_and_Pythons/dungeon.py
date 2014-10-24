@@ -6,11 +6,10 @@ from orc import Orc
 class Dungeon:
 
     def __init__(self, filename):
-        self.map = self._read_map(filename)
+        self.map = self._read_map(filename)         # print format
         self._ROW_LEN = self._get_row_length()
-        self.map_list = self._make_list()
-        self.players = {}
-        self.player_pos = {}
+        self.players = {}                           # (player_name, entity)
+        self.player_pos = {}                        # (player_name, position)
 
     def _read_map(self, filename):
         result = ""
@@ -22,15 +21,12 @@ class Dungeon:
         return result
 
     def _get_row_length(self):
-        i = 0
-        while i < len(self.map):
-            if self.map[i] == "\n":
-                return i
-            i += 1
-        return 0
+        return self.map.find("\n")
 
-    def _make_list(self):
-        return [elem for elem in list(self.map) if elem != "\n"]
+    def _swap_chars(self, pos_a, pos_b):
+        temp = list(self.map)
+        temp[pos_a], temp[pos_b] = temp[pos_b], temp[pos_a]
+        self.map = "".join(temp)
 
     def print_map(self):
         print(self.map)
@@ -59,13 +55,42 @@ class Dungeon:
             raise ValueError
         if direction not in ["up", "down", "left", "right"]:
             raise ValueError
-        player = "H" if isinstance(self.players[player_name], Hero) else "O"
 
-        if direction == "up":
-            pass
-        elif direction == "down":
-            pass
-        elif direction == "left":
-            pass
+        cur_pos = self.player_pos[player_name]
+
+        if direction == "left":
+            if cur_pos > 0 and self.map[cur_pos - 1] == ".":
+                self._swap_chars(cur_pos, cur_pos - 1)
+                self.player_pos[player_name] = cur_pos - 1
+                return True
+            else:
+                return False
         elif direction == "right":
-            pass
+            if cur_pos < (len(self.map) - 2) and self.map[cur_pos + 1] == ".":
+                self._swap_chars(cur_pos, cur_pos + 1)
+                self.player_pos[player_name] = cur_pos + 1
+                return True
+            else:
+                return False
+        elif direction == "up":
+            if cur_pos > self._ROW_LEN:
+                pos_above = cur_pos - self._ROW_LEN - 1     # -1 for \n
+                if self.map[pos_above] == ".":
+                    self._swap_chars(cur_pos, pos_above)
+                    self.player_pos[player_name] = pos_above
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        elif direction == "down":
+            if cur_pos < len(self.map) - self._ROW_LEN:
+                pos_below = cur_pos + self._ROW_LEN + 1     # +1 for \n
+                if self.map[pos_below] == ".":
+                    self._swap_chars(cur_pos, pos_below)
+                    self.player_pos[player_name] = pos_below
+                    return True
+                else:
+                    return False
+            else:
+                return False

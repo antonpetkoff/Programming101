@@ -51,33 +51,6 @@ class TestDungeon(unittest.TestCase):
     def test_spawn_type_error(self):
         with self.assertRaises(TypeError):
             self.dungeon.spawn("Dingo")
-"""
-    def test_move_success(self):
-        self.dungeon.spawn("the_hero", self.hero)
-        self.dungeon.spawn("the_orc", self.orc)
-
-        self.assertTrue(self.dungeon.move("the_hero", "right"))
-        self.test_map = self.test_map.replace(".", "H", 1)
-        self.test_map = self.test_map.replace("H", ".", 1)
-        self.assertEqual(self.test_map, self.dungeon.map)
-
-        self.assertTrue(self.dungeon.move("the_orc", "up"))
-        temp_list = list(self.test_map)
-        temp_list[len(temp_list) - 11] = "O"
-        temp_list[len(temp_list) - 1] = "."
-        self.test_map = "".join(temp_list)
-        self.assertEqual(self.test_map, self.dungeon.map)
-
-    def test_move_fail(self):
-        self.dungeon.spawn("the_hero", self.hero)
-        self.dungeon.spawn("the_orc", self.orc)
-
-        self.assertFalse(self.dungeon.move("the_hero", "left"))
-        self.assertFalse(self.dungeon.move("the_hero", "up"))
-        self.assertFalse(self.dungeon.move("the_hero", "down"))
-
-        self.assertFalse(self.dungeon.move("the_orc", "right"))
-        self.assertFalse(self.dungeon.move("the_orc", "down"))
 
     def test_move_invalid_direction(self):
         self.dungeon.spawn("the_hero", self.hero)
@@ -85,9 +58,51 @@ class TestDungeon(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.dungeon.move("the_hero", "dooooooown")
 
-    def test_move_invalid_player(self):
+    def test_move_invalid_player_name(self):
         with self.assertRaises(ValueError):
             self.dungeon.move("invalid", "down")
-"""
+
+    def test_move_right_success(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.assertTrue(self.dungeon.move("the_hero", "right"))
+
+    def test_move_right_fail(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.dungeon.spawn("the_orc", self.orc)
+        self.assertFalse(self.dungeon.move("the_orc", "right"))
+
+    def test_move_left_success(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.dungeon.move("the_hero", "right")
+        self.assertTrue(self.dungeon.move("the_hero", "left"))
+
+    def test_move_left_fail(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.dungeon.spawn("the_orc", self.orc)
+        self.assertFalse(self.dungeon.move("the_hero", "left"))
+        self.assertFalse(self.dungeon.move("the_orc", "left"))
+
+    def test_move_up_success(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.dungeon.spawn("the_orc", self.orc)
+        self.assertTrue(self.dungeon.move("the_orc", "up"))
+
+    def test_move_up_fail(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.assertFalse(self.dungeon.move("the_hero", "up"))
+
+    def test_move_down_success(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.dungeon.move("the_hero", "right")
+        self.assertTrue(self.dungeon.move("the_hero", "down"))
+        self.assertTrue(self.dungeon.move("the_hero", "down"))
+
+    def test_move_down_fail(self):
+        self.dungeon.spawn("the_hero", self.hero)
+        self.dungeon.spawn("the_orc", self.orc)
+        self.assertFalse(self.dungeon.move("the_hero", "down"))
+        self.assertFalse(self.dungeon.move("the_orc", "down"))
+
+
 if __name__ == '__main__':
     unittest.main()

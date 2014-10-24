@@ -1,4 +1,6 @@
 from song import Song
+from collections import namedtuple
+import json
 
 
 class Playlist:
@@ -46,3 +48,37 @@ class Playlist:
             if i != len(self.songs) - 1:
                 result += "\n"
         return result
+
+    def to_JSON(self):
+        return json.dumps(self,
+                          default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+
+    def save(self, file_name):
+        with open(file_name, "w") as writeFile:
+            writeFile.write(self.to_JSON())
+
+    @staticmethod
+    def load(file_name):
+        with open(file_name, "r") as readFile:
+            source = json.loads(readFile.read())
+            playlist = Playlist(source["name"])
+            for song in source["songs"]:
+                playlist.add_song(Song(**song))
+            return playlist
+
+
+def main():
+    song = Song("The Jack", "ACDC", "T.N.T.", 4, 256, 320)
+    song_2 = Song("The Mack", "ACDC", "B.N.B.", 2, 256, 96)
+    playlist = Playlist("Test Playlist")
+    playlist.add_song(song)
+    playlist.add_song(song_2)
+
+    playlist.save("output.json")
+    new_playlist = Playlist.load("output.json")
+    print(str(new_playlist))
+    print(str(playlist))
+
+if __name__ == '__main__':
+    main()

@@ -1,6 +1,8 @@
 import unittest
 from playlist import Playlist
 from song import Song
+from uuid import uuid4
+from os import remove
 
 
 class PlaylistTests(unittest.TestCase):
@@ -53,6 +55,17 @@ class PlaylistTests(unittest.TestCase):
         self.playlist.add_song(self.song)
         self.playlist.add_song(self.song_2)
         self.assertEqual(self.playlist.show_artists(), ["ACDC"])
+
+    def test_load(self):
+        self.playlist.add_song(self.song)
+        self.playlist.add_song(self.song_2)
+
+        file_name = str(uuid4())
+        self.playlist.save(file_name)
+        loaded_playlist = Playlist.load(file_name)
+        remove(file_name)
+
+        self.assertEqual(str(self.playlist), str(loaded_playlist))
 
 
 if __name__ == '__main__':

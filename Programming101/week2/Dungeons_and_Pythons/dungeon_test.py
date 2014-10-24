@@ -103,6 +103,13 @@ class TestDungeon(unittest.TestCase):
         self.assertFalse(self.dungeon.move("the_hero", "down"))
         self.assertFalse(self.dungeon.move("the_orc", "down"))
 
+    def test_move_fight(self):
+        self.dungeon.map = self.dungeon.map.replace(".", "S", 1)
+        self.dungeon.spawn("the_hero", self.hero)
+        self.dungeon.spawn("the_orc", self.orc)
+        self.dungeon.print_map()
+
+        # do the fight by moving the hero right once
 
 if __name__ == '__main__':
     unittest.main()

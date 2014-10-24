@@ -1,6 +1,7 @@
 from entity import Entity
 from hero import Hero
 from orc import Orc
+from fight import Fight
 
 
 class Dungeon:
@@ -57,40 +58,39 @@ class Dungeon:
             raise ValueError
 
         cur_pos = self.player_pos[player_name]
+        pos_changed = False
 
         if direction == "left":
-            if cur_pos > 0 and self.map[cur_pos - 1] == ".":
-                self._swap_chars(cur_pos, cur_pos - 1)
-                self.player_pos[player_name] = cur_pos - 1
-                return True
-            else:
-                return False
+            if cur_pos > 0:
+                if self.map[cur_pos - 1] == ".":
+                    self._swap_chars(cur_pos, cur_pos - 1)
+                    self.player_pos[player_name] = cur_pos - 1
+                    pos_changed = True
+                elif self.map[cur_pos - 1] in ["H", "O"]:
+                    pass
+                    # simulate fight
         elif direction == "right":
-            if cur_pos < (len(self.map) - 2) and self.map[cur_pos + 1] == ".":
-                self._swap_chars(cur_pos, cur_pos + 1)
-                self.player_pos[player_name] = cur_pos + 1
-                return True
-            else:
-                return False
+            if cur_pos < (len(self.map) - 2):
+                if self.map[cur_pos + 1] == ".":
+                    self._swap_chars(cur_pos, cur_pos + 1)
+                    self.player_pos[player_name] = cur_pos + 1
+                    pos_changed = True
         elif direction == "up":
             if cur_pos > self._ROW_LEN:
                 pos_above = cur_pos - self._ROW_LEN - 1     # -1 for \n
                 if self.map[pos_above] == ".":
                     self._swap_chars(cur_pos, pos_above)
                     self.player_pos[player_name] = pos_above
-                    return True
-                else:
-                    return False
-            else:
-                return False
+                    pos_changed = True
         elif direction == "down":
             if cur_pos < len(self.map) - self._ROW_LEN:
                 pos_below = cur_pos + self._ROW_LEN + 1     # +1 for \n
                 if self.map[pos_below] == ".":
                     self._swap_chars(cur_pos, pos_below)
                     self.player_pos[player_name] = pos_below
-                    return True
-                else:
-                    return False
-            else:
-                return False
+                    pos_changed = True
+
+        return pos_changed
+
+    def _make_fight(self, pos_a, pos_b, pos_prize):
+        pass

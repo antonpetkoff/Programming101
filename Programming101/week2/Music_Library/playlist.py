@@ -65,19 +65,3 @@ class Playlist:
             for song in source["songs"]:
                 playlist.add_song(Song(**song))
             return playlist
-
-
-def main():
-    song = Song("The Jack", "ACDC", "T.N.T.", 4, 256, 320)
-    song_2 = Song("The Mack", "ACDC", "B.N.B.", 2, 256, 96)
-    playlist = Playlist("Test Playlist")
-    playlist.add_song(song)
-    playlist.add_song(song_2)
-
-    playlist.save("output.json")
-    new_playlist = Playlist.load("output.json")
-    print(str(new_playlist))
-    print(str(playlist))
-
-if __name__ == '__main__':
-    main()

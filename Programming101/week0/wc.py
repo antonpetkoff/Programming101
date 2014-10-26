@@ -2,21 +2,24 @@ import sys
 
 
 def wc(command, filename):
-    with open(filename, "r") as readFile:
-        if command == "chars":
-            return len(readFile.read())
-        elif command == "words":
-            text = readFile.read().replace("\n", " ")
-            words = text.split(" ")
-            wordsCount = 0
-            for word in words:
-                if word != "":
-                    wordsCount += 1
-            return wordsCount
-        elif command == "lines":
-            return len(readFile.readlines())
-        else:
-            return "Invalid command!"
+    try:
+        with open(filename, "r") as readFile:
+            if command == "chars":
+                return len(readFile.read())
+            elif command == "words":
+                text = readFile.read().replace("\n", " ")
+                words = text.split(" ")
+                wordsCount = 0
+                for word in words:
+                    if word != "":
+                        wordsCount += 1
+                return wordsCount
+            elif command == "lines":
+                return len(readFile.readlines())
+            else:
+                return "Invalid command!"
+    except FileNotFoundError:
+        raise
 
 
 def main():

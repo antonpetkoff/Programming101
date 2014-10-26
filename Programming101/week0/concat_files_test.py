@@ -47,6 +47,10 @@ class ConcatFilesTests(unittest.TestCase):
         else:
             os.remove("MEGATRON.txt")
 
+    def test_with_nonExisting_files(self):
+        with self.assertRaises(FileNotFoundError):
+            concat_files([str(uuid4())])
+
 
 if __name__ == '__main__':
     unittest.main()

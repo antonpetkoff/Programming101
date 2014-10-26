@@ -92,5 +92,5 @@ class Dungeon:
 
         return pos_changed
 
-    def _make_fight(self, pos_a, pos_b, pos_prize):
+    def _make_fight(self, pos_pretender, pos_for_claim):
         pass

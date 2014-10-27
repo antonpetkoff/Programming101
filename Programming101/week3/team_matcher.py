@@ -19,6 +19,9 @@ class TeamMatcher:
                 courses.add(course["name"])
         return list(courses)
 
+    def _repeatChar(self, char, times):     # helper method
+        return char * times
+
     def list_courses(self):
         for i in range(len(self.courses)):
             print("[{}] {}".format(i+1, self.courses[i]))
@@ -33,21 +36,22 @@ class TeamMatcher:
 
         shuffle(names)
 
-        print("==========")
+        print(self._repeatChar("=", 10))
         for i in range(len(names)):
             print(names[i])
             if (i+1) % team_size == 0:
-                print("==========")
+                print(self._repeatChar("=", 10))
 
     @staticmethod
     def loop():
         tm = TeamMatcher()
-        print("Hello, you can use one the the following commands:\n\
-list_courses - this lists all the courses that are available now.\n\
-match_teams <course_id>, <team_size>, <group_time>\n\
-quit - for quitting")
+        print("Hello, you can use one the the following commands:")
+        print("list_courses - lists all the courses that are available now.")
+        print("match_teams <course_id>, <team_size>, <group_time>")
+        print("quit - for quitting")
+
         while True:
-            command = input("Enter command>")
+            command = input("> ")
             if command == "list_courses":
                 tm.list_courses()
             elif command.find("match_teams") != -1:

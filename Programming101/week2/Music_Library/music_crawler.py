@@ -10,11 +10,13 @@ class MusicCrawler:
 
     def __init__(self, directory):
         self.directory = directory
+        self.mp3_files = []
 
     def generate_playlist(self):
         playlist = Playlist("Playlist")
         for file_name in os.listdir(self.directory):
             if fnmatch(file_name, "*.mp3"):
+                self.mp3_files.append(self.directory + file_name)
                 id3 = ID3(self.directory + file_name)
                 mp3 = MP3(self.directory + file_name)
                 song = Song(id3['TIT2'],

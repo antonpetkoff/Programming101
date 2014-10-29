@@ -1,11 +1,11 @@
 import unittest
-from graph import Graph
+from graph import DirectedGraph
 
 
-class GraphTests(unittest.TestCase):
+class DirectedGraphTests(unittest.TestCase):
 
     def setUp(self):
-        self.graph = Graph()
+        self.graph = DirectedGraph()
 
     def test_add_edge_non_existing_nodes(self):
         self.graph.add_edge("Ionko", "Dingo")

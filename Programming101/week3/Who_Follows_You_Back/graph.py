@@ -1,5 +1,5 @@
 
-class Graph:
+class DirectedGraph:
 
     def __init__(self):
         self.nodes = {}

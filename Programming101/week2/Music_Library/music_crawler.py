@@ -23,7 +23,7 @@ class MusicCrawler:
                             id3['TPE1'],
                             id3['TALB'],
                             5,
-                            mp3.info.length,
+                            int(mp3.info.length),
                             mp3.info.bitrate)
                 playlist.add_song(song)
         return playlist

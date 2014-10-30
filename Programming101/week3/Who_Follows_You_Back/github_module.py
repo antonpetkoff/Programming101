@@ -6,7 +6,6 @@ class GitHubModule:
 
     def __init__(self):
         #elf.depth_counter = 0
-        self.auth = ("tonynho", "ZiDaN4O10")
         self.graph = DirectedGraph()
         #self.fill_graph_for_user("Ivaylo-Bachvarov")
         self.fill_graph_recursion("Ivaylo-Bachvarov")

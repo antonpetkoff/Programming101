@@ -9,10 +9,10 @@ ers?client_id={}&client_secret={}"
     CLIENT_ID = "6fd2017ecf6841cd6666"
     CLIENT_SECRET = "19e84bb54b28974bbc2260a778b28c1139f91360"
 
-    def __init__(self):
+    def __init__(self, parent):
+        self.parent = parent
         self.graph = DirectedGraph()
-        #self.fill_graph_for_user("tonynho")
-        self.fill_graph_recursion("tonynho")
+        self.fill_graph(self.parent)
 
     def fill_graph_for_user(self, user):
         url = self.URL_PATTERN.format(user, self.CLIENT_ID, self.CLIENT_SECRET)
@@ -22,24 +22,30 @@ ers?client_id={}&client_secret={}"
         for follower in followers_dict:
             self.graph.add_edge(user, follower["login"])
 
-    def fill_graph_recursion(self, user):
+    def fill_graph(self, user):
         self.fill_graph_for_user(user)
-        followers = self.graph.nodes[user]
-        temp = []
+        followers = set(self.graph.nodes[user])
+        temp = set()            # use set to prevent repetitions
 
-        for i in range(3):      # two more levels of depth
+        for i in range(2):      # two more levels of depth
             for follower in followers:
                 self.fill_graph_for_user(follower)
                 for name in self.graph.nodes[follower]:
-                    temp.append(name)
+                    temp.add(name)
             followers = temp.copy()
-            temp = []
+            temp = set()
 
-        print(str(self.graph))
+    def following(self):
+        users_the_parent_follows = []
+        for user in self.graph.nodes.keys():
+            if self.parent in self.graph.nodes[user]:
+                users_the_parent_follows.append(user)
+        return users_the_parent_follows
 
 
 def main():
-    obj = GitHubModule()
+    obj = GitHubModule("tonynho")
+    print(obj.following())
 
 
 if __name__ == '__main__':

@@ -42,10 +42,16 @@ ers?client_id={}&client_secret={}"
                 users_the_parent_follows.append(user)
         return users_the_parent_follows
 
+    def is_following(self, user):
+        if user in self.graph.nodes.keys():
+            return self.parent in self.graph.nodes[user]
+        return False
+
 
 def main():
     obj = GitHubModule("tonynho")
-    print(obj.following())
+    print(obj.is_following("cpi-cecko"))
+    print(obj.is_following("dingo"))
 
 
 if __name__ == '__main__':

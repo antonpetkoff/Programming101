@@ -13,10 +13,10 @@ class CompanyManager:
         self.cursor = self.connect.cursor()
 
     def list_employees(self):
-        selection = self.cursor.execute('''SELECT name, position
+        selection = self.cursor.execute('''SELECT id, name, position
             FROM employees''')
         for row in selection:
-            print("{} - {}".format(row["name"], row["position"]))
+            print("{} - {} - {}".format(row["id"], row["name"], row["position"]))
 
     def monthly_spending(self):
         sum_monthly = self.cursor.execute('''SELECT SUM(monthly_salary)
@@ -41,21 +41,62 @@ class CompanyManager:
         self.cursor.execute('''INSERT INTO
             employees(name, monthly_salary, yearly_bonus, position)
             VALUES(?, ?, ?, ?);''',
-            (name, monthly_salary, yearly_bonus, position))
+                            (name, monthly_salary, yearly_bonus, position))
 
         self.connect.commit()
 
-        # result = self.cursor.execute('''SELECT * FROM employees''').fetchall()
-        # print([list(x) for x in result])
+    def delete_employee(self, id):
+        get_ids = self.cursor.execute('''SELECT id FROM employees''')
+        ids_list = [list(x) for x in get_ids.fetchall()]
+        if [id] in ids_list:
+            self.cursor.execute('''DELETE FROM employees WHERE ID = ?''', (id,))
+            self.connect.commit()
+        else:
+            raise ValueError("delete_employee(): No such id: {}".format(id))
+
+    def update_employee(self, id):
+        get_ids = self.cursor.execute('''SELECT id FROM employees''')
+        ids_list = [list(x) for x in get_ids.fetchall()]
+        if [id] in ids_list:
+            name = input("name> ")
+            monthly_salary = input("monthly_salary> ")
+            yearly_bonus = input("yearly_bonus> ")
+            position = input("position> ")
+
+            self.cursor.execute('''UPDATE employees SET name = ?,
+                monthly_salary = ?, yearly_bonus = ?, position = ?
+                WHERE id = ?;''', (name, monthly_salary, yearly_bonus, position, id))
+
+            self.connect.commit()
+        else:
+            raise ValueError("update_employee(): No such id: {}".format(id))
+
+    @staticmethod
+    def loop(manager):
+        while True:
+            command = input("command> ")
+
+            if command == "list_employees":
+                manager.list_employees()
+            elif command == "monthly_spending":
+                manager.monthly_spending()
+            elif command == "yearly_spending":
+                manager.yearly_spending()
+            elif command == "add_employee":
+                manager.add_employee()
+            elif command.find("delete_employee") != -1:
+                args = command.split(" ")
+                manager.delete_employee(args[1])
+            elif command.find("update_employee") != -1:
+                args = command.split(" ")
+                manager.update_employee(args[1])
+            else:
+                print("Invalid command!")
 
 
 def main():
     manager = CompanyManager("company.db")
-    #manager.list_employees()
-    #manager.monthly_spending()
-    #manager.yearly_spending()
-    #manager.add_employee()
-    manager.list_employees()
+    CompanyManager.loop(manager)
 
 if __name__ == '__main__':
     main()

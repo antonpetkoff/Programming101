@@ -64,27 +64,43 @@ class ManageDB:
             VALUES(?,?,?,?);''', reservations)
         self.connect.commit()
 
+    def get_spots_available(self, proj_id):
+        pass
+
     def show_movies(self):
         movies = self.cursor.execute('''SELECT * from movies;''').fetchall()
         output = "[{}] - {} ({})"
         for movie in movies:
             print(output.format(movie['id'], movie['name'], movie['rating']))
 
-    def show_movie_projections(self, movie_id):
+    def show_movie_projections(self, movie_id, date):
         movie = self.cursor.execute('''SELECT name from movies
             WHERE id = ?;''', (movie_id, )).fetchall()
-        print("Projections for movie \'{}\':".format(movie[0][0]))
-        projections = self.cursor.execute('''SELECT * from projections
-            WHERE movie_id = ? ORDER BY date, time;''', (movie_id,)).fetchall()
-        output = "[{}] - {} {} ({})"
-        for item in projections:
-            print(output.format(item['id'], item['date'],
-                                item['time'], item['type']))
+
+        if date is None:
+            print("Projections for movie \'{}\':".format(movie[0][0]))
+
+            selection = self.cursor.execute('''SELECT * from projections WHERE
+                movie_id = ? ORDER BY date, time;''', (movie_id,)).fetchall()
+            output = "[{}] - {} {} ({})"
+            for item in selection:
+                print(output.format(item['id'], item['date'],
+                                    item['time'], item['type']))
+        else:
+            message = "Projections for movie \'{}\' on date {}:"
+            print(message.format(movie[0][0], date))
+
+            selection = self.cursor.execute('''SELECT * from projections WHERE
+                movie_id = ? AND date = ?
+                ORDER BY date, time;''', (movie_id, date)).fetchall()
+            output = "[{}] - {} ({})"
+            for item in selection:
+                print(output.format(item['id'], item['time'], item['type']))
 
 
 def main():
     cinema = ManageDB("cinema.db")
-    cinema.show_movie_projections(2)
+    cinema.show_movie_projections(1, "2014-04-01")
 
 
 if __name__ == '__main__':

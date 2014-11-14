@@ -21,7 +21,8 @@ class CompanyManager:
     def monthly_spending(self):
         sum_monthly = self.cursor.execute('''SELECT SUM(monthly_salary)
             AS sum FROM employees''')
-        print(sum_monthly.fetchone()["sum"])
+        output = "The company is spending ${} every month!"
+        print(output.format(sum_monthly.fetchone()["sum"]))
 
     def yearly_spending(self):
         sum_monthly = self.cursor.execute('''SELECT SUM(monthly_salary)
@@ -30,7 +31,8 @@ class CompanyManager:
         sum_yearly = self.cursor.execute('''SELECT SUM(yearly_bonus)
             AS sum FROM employees''')
         year = sum_yearly.fetchone()["sum"]
-        print(12 * month + year)
+        output = "The company is spending ${} every year!"
+        print(output.format(12 * month + year))
 
     def add_employee(self):
         name = input("name> ")
@@ -46,18 +48,18 @@ class CompanyManager:
         self.connect.commit()
 
     def delete_employee(self, id):
-        get_ids = self.cursor.execute('''SELECT id FROM employees''')
-        ids_list = [list(x) for x in get_ids.fetchall()]
-        if [id] in ids_list:
+        get_ids = self.cursor.execute('''SELECT id FROM employees''').fetchall()
+        ids_list = [int(x[0]) for x in get_ids]
+        if int(id) in ids_list:
             self.cursor.execute('''DELETE FROM employees WHERE ID = ?''', (id,))
             self.connect.commit()
         else:
             raise ValueError("delete_employee(): No such id: {}".format(id))
 
     def update_employee(self, id):
-        get_ids = self.cursor.execute('''SELECT id FROM employees''')
-        ids_list = [list(x) for x in get_ids.fetchall()]
-        if [id] in ids_list:
+        get_ids = self.cursor.execute('''SELECT id FROM employees''').fetchall()
+        ids_list = [int(x[0]) for x in get_ids]
+        if int(id) in ids_list:
             name = input("name> ")
             monthly_salary = input("monthly_salary> ")
             yearly_bonus = input("yearly_bonus> ")
@@ -74,7 +76,7 @@ class CompanyManager:
     @staticmethod
     def loop(manager):
         while True:
-            command = input("command> ")
+            command = input("command (enter \"quit\" to exit)> ")
 
             if command == "list_employees":
                 manager.list_employees()
@@ -90,6 +92,9 @@ class CompanyManager:
             elif command.find("update_employee") != -1:
                 args = command.split(" ")
                 manager.update_employee(args[1])
+            elif command == "quit":
+                print("Bye!")
+                break
             else:
                 print("Invalid command!")
 

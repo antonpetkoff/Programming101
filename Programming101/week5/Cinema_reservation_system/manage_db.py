@@ -5,8 +5,8 @@ class ManageDB:
 
     def __init__(self, file_name):
         self.connect = sqlite3.connect(file_name)
-        self.cursor = self.connect.cursor()
         self.connect.row_factory = sqlite3.Row
+        self.cursor = self.connect.cursor()
 
         self.create_tables()
         self.add_movies()
@@ -64,15 +64,16 @@ class ManageDB:
             VALUES(?,?,?,?);''', reservations)
         self.connect.commit()
 
-    def join_tables(self):
-        pass
+    def show_movies(self):
+        movies = self.cursor.execute('''SELECT * from movies;''')
+        output = "[{}] - {} ({})"
+        for movie in movies:
+            print(output.format(movie['id'], movie['name'], movie['rating']))
 
 
 def main():
-    movies = CreateDB("cinema.db")
-
-    contents = movies.cursor.execute('''SELECT * from projections;''').fetchall()
-    print(contents)
+    cinema = ManageDB("cinema.db")
+    cinema.show_movies()
 
 
 if __name__ == '__main__':

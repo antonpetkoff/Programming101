@@ -2,6 +2,7 @@ import sqlite3
 
 
 class ManageDB:
+    MAX_SPOTS = 100
 
     def __init__(self, file_name):
         self.connect = sqlite3.connect(file_name)
@@ -65,7 +66,9 @@ class ManageDB:
         self.connect.commit()
 
     def get_spots_available(self, proj_id):
-        pass
+        selection = self.cursor.execute('''SELECT * from reservations WHERE
+            projections_id = ?;''', (proj_id,)).fetchall()
+        return self.MAX_SPOTS - len(selection)
 
     def show_movies(self):
         movies = self.cursor.execute('''SELECT * from movies;''').fetchall()
@@ -82,10 +85,11 @@ class ManageDB:
 
             selection = self.cursor.execute('''SELECT * from projections WHERE
                 movie_id = ? ORDER BY date, time;''', (movie_id,)).fetchall()
-            output = "[{}] - {} {} ({})"
+            output = "[{}] - {} {} ({}) - {} spots available"
             for item in selection:
+                spots = self.get_spots_available(item['id'])
                 print(output.format(item['id'], item['date'],
-                                    item['time'], item['type']))
+                                    item['time'], item['type'], spots))
         else:
             message = "Projections for movie \'{}\' on date {}:"
             print(message.format(movie[0][0], date))
@@ -100,7 +104,7 @@ class ManageDB:
 
 def main():
     cinema = ManageDB("cinema.db")
-    cinema.show_movie_projections(1, "2014-04-01")
+    cinema.show_movie_projections(2, None)
 
 
 if __name__ == '__main__':

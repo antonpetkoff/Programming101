@@ -65,15 +65,26 @@ class ManageDB:
         self.connect.commit()
 
     def show_movies(self):
-        movies = self.cursor.execute('''SELECT * from movies;''')
+        movies = self.cursor.execute('''SELECT * from movies;''').fetchall()
         output = "[{}] - {} ({})"
         for movie in movies:
             print(output.format(movie['id'], movie['name'], movie['rating']))
 
+    def show_movie_projections(self, movie_id):
+        movie = self.cursor.execute('''SELECT name from movies
+            WHERE id = ?;''', (movie_id, )).fetchall()
+        print("Projections for movie \'{}\':".format(movie[0][0]))
+        projections = self.cursor.execute('''SELECT * from projections
+            WHERE movie_id = ? ORDER BY date, time;''', (movie_id,)).fetchall()
+        output = "[{}] - {} {} ({})"
+        for item in projections:
+            print(output.format(item['id'], item['date'],
+                                item['time'], item['type']))
+
 
 def main():
     cinema = ManageDB("cinema.db")
-    cinema.show_movies()
+    cinema.show_movie_projections(2)
 
 
 if __name__ == '__main__':

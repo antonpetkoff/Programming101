@@ -18,30 +18,32 @@ def create_clients_table():
 
 
 def change_message(new_message, logged_user):
-    update_sql = "UPDATE clients SET message = '%s' WHERE id = '%s'" % (new_message, logged_user.get_id())
-    cursor.execute(update_sql)
+    update_sql = "UPDATE clients SET message = ? WHERE id = ?"
+    cursor.execute(update_sql, (new_message, logged_user.get_id()))
     conn.commit()
     logged_user.set_message(new_message)
 
 
 def change_pass(new_pass, logged_user):
-    update_sql = "UPDATE clients SET password = '%s' WHERE id = '%s'" % (new_pass, logged_user.get_id())
-    cursor.execute(update_sql)
+    update_sql = "UPDATE clients SET password = ? WHERE id = ?"
+    cursor.execute(update_sql, (new_pass, logged_user.get_id()))
     conn.commit()
 
 
 def register(username, password):
-    insert_sql = "insert into clients (username, password) values ('%s', '%s')" % (username, password)
-    cursor.execute(insert_sql)
+    insert_sql = "INSERT into clients (username, password) VALUES (?, ?)"
+    cursor.execute(insert_sql, (username, password))
     conn.commit()
+    #print("REGISTERED ({}, {})".format(username, password))
 
 
 def login(username, password):
-    select_query = "SELECT id, username, balance, message FROM clients WHERE username = '%s' AND password = '%s' LIMIT 1" % (username, password)
-    
-    cursor.execute(select_query)
-    user = cursor.fetchone()
+    select_query = '''SELECT id, username, balance, message FROM clients
+        WHERE username = ? AND password = ? LIMIT 1'''
 
+    cursor.execute(select_query, (username, password))
+    user = cursor.fetchone()
+    #print("LOGIN with ({}, {})".format(username, password))
     if(user):
         return Client(user[0], user[1], user[2], user[3])
     else:

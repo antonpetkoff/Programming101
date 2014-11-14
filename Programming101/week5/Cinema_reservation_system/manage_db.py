@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class CreateDB:
+class ManageDB:
 
     def __init__(self, file_name):
         self.connect = sqlite3.connect(file_name)
@@ -12,7 +12,6 @@ class CreateDB:
         self.add_movies()
         self.add_projections()
         self.add_reservations()
-        self.join_tables()
 
     def __del__(self):
         self.connect.close()

@@ -6,8 +6,60 @@ class CinemaCLI:
     def __init__(self):
         self.db = ManageDB("cinema_cli.db")
 
+    def input_user_and_tickets(self):
+        name = input("Step 1 (User): Choose name> ")
+        tickets = input("Step 1 (User): Choose number of tickets> ")
+        # check user input
+
+        print("Current movies:")
+        self.db.show_movies()
+        return (name, int(tickets))
+
+    def choose_movie_id(self):
+        movie_id = input("Step 2 (Movie): Choose a movie> ")
+        # handle input, check for mistakes
+
+        self.db.show_movie_projections(int(movie_id), None)
+        return int(movie_id)
+
+    def choose_proj_id(self):
+        proj_id = input("Step 3 (Projection): Choose a projection> ")
+        # check user input
+
+        self.db.print_seats(int(proj_id))
+        return int(proj_id)
+
+    def choose_seats(self, seat_count):     # return a list of tuples (row, col)
+        seats = []
+        for i in range(seat_count):
+            seat = i + 1
+            pos = input("Step 4 (Seats): Choose seat {}> ".format(seat))
+            # check user input
+            seats.append(pos)
+        return seats
+
+    def print_reservation(self, movie_id, proj_id, seats):
+        print("This is your reservation:")
+        print("Movie: {}".format(self.db.get_movie_name_by_id(movie_id)))
+        print("Date & Time: {}".format(self.db.get_proj_date_and_time(proj_id)))
+
+        seats_msg = "Seats: "
+        for i in range(len(seats)):
+            if i != len(seats) - 1:
+                seats_msg += str(seats[i]) + ", "
+            else:
+                seats_msg += str(seats[i])
+        print(seats_msg)
+
     def make_reservation(self):
-        pass
+        name, tickets_count = self.input_user_and_tickets()
+        movie_id = self.choose_movie_id()
+        proj_id = self.choose_proj_id()
+        seats = self.choose_seats(tickets_count)
+
+        self.print_reservation(movie_id, proj_id, seats)
+        # for seat in seats:
+        #     self.db.add_reservation(name, proj_id, seat[0], seat[1])
 
     def main_loop(self):
         while True:
@@ -37,7 +89,7 @@ class CinemaCLI:
         print("show_movies")
         print("show_movie_projections <movie_id> [date]")
         print("nmake_reservation")
-        print("ncancel_reservation <name>")
+        print("cancel_reservation <name>")
         print("help")
         print("exit")
 

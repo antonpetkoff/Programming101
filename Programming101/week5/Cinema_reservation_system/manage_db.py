@@ -116,6 +116,7 @@ class ManageDB:
         selection = self.get_taken_seats_for_projection(proj_id)
 
         seats = ""
+        seats += "Available seats (marked with a dot):\n"
         seats += "   1 2 3 4 5 6 7 8 9 10\n"
         for x in range(1, 11):
             seats += str(x) + (" " if x == 10 else "  ")
@@ -138,9 +139,6 @@ class ManageDB:
             VALUES(?, ?, ?, ?)''', (username, proj_id, row, col))
         self.connect.commit()
 
-    def make_reservation(self):
-        pass
-
     def show_reservations(self):
         selection = self.cursor.execute('''SELECT
          * from reservations;''').fetchall()
@@ -148,12 +146,30 @@ class ManageDB:
             print(e["id"], e["username"], e["projections_id"],
                   e["row"], e["col"])
 
+    def get_movie_name_by_id(self, movie_id):
+        selection = self.cursor.execute('''SELECT name, rating
+            from movies WHERE movies.id = ?;''', (movie_id,)).fetchall()
+        if len(selection) == 0:
+            return "No movie with ID {}!".format(movie_id)
+        movie = selection[0]
+        return "{} {}".format(movie["name"], movie["rating"])
+
+    def get_proj_date_and_time(self, proj_id):
+        selection = self.cursor.execute('''SELECT date, time, type
+          from projections WHERE projections.id = ?;''', (proj_id,)).fetchall()
+        if len(selection) == 0:
+            return "No projections with ID {}!".format(proj_id)
+        item = selection[0]
+        return "{} {} ({})".format(item["date"], item["time"], item["type"])
+
 
 def main():
     cinema = ManageDB("cinema.db")
     #cinema.show_movie_projections(3, "2014-04-01")
     cinema.show_reservations()
     cinema.show_movies()
+    print(cinema.get_movie_name_by_id(2))
+    print(cinema.get_proj_date_and_time(5))
 
 
 if __name__ == '__main__':

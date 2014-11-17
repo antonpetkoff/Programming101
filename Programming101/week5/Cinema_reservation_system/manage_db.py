@@ -162,6 +162,18 @@ class ManageDB:
         item = selection[0]
         return "{} {} ({})".format(item["date"], item["time"], item["type"])
 
+    def movie_id_exists(self, movie_id):
+        selection = self.cursor.execute('''SELECT id from movies
+            WHERE movies.id = ?;''', (movie_id,)).fetchall()
+        if len(selection) == 0:
+            return False
+        return True
+
+    def get_proj_ids_for_movie(self, movie_id):
+        selection = self.cursor.execute('''SELECT id from projections
+            WHERE projections.movie_id = ?;''', (movie_id,)).fetchall()
+        return [int(x["id"]) for x in selection]
+
 
 def main():
     cinema = ManageDB("cinema.db")
@@ -170,6 +182,7 @@ def main():
     cinema.show_movies()
     print(cinema.get_movie_name_by_id(2))
     print(cinema.get_proj_date_and_time(5))
+    print(cinema.get_proj_ids_for_movie(2))
 
 
 if __name__ == '__main__':

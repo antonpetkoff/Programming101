@@ -6,25 +6,49 @@ class CinemaCLI:
     def __init__(self):
         self.db = ManageDB("cinema_cli.db")
 
+    @staticmethod
+    def is_number(string):
+        for ch in string:
+            if not ch.isdigit():
+                return False
+        return True
+
     def input_user_and_tickets(self):
         name = input("Step 1 (User): Choose name> ")
-        tickets = input("Step 1 (User): Choose number of tickets> ")
-        # check user input
+
+        while True:
+            tickets = input("Step 1 (User): Choose number of tickets> ")
+
+            if self.is_number(tickets):
+                if int(tickets) > 0:
+                    break
+            print("Enter a positive integer")
 
         print("Current movies:")
         self.db.show_movies()
         return (name, int(tickets))
 
     def choose_movie_id(self):
-        movie_id = input("Step 2 (Movie): Choose a movie> ")
-        # handle input, check for mistakes
+        while True:
+            movie_id = input("Step 2 (Movie): Choose a movie> ")
+            if self.is_number(movie_id):
+                if self.db.movie_id_exists(int(movie_id)):
+                    break
+            print("Invalid movie ID: {}".format(movie_id))
 
         self.db.show_movie_projections(int(movie_id), None)
         return int(movie_id)
 
-    def choose_proj_id(self):
-        proj_id = input("Step 3 (Projection): Choose a projection> ")
-        # check user input
+    def choose_proj_id(self, movie_id):
+        valid_ids = self.db.get_proj_ids_for_movie(movie_id)
+
+        while True:
+            proj_id = input("Step 3 (Projection): Choose a projection> ")
+
+            if self.is_number(proj_id):
+                if int(proj_id) in valid_ids:
+                    break
+            print("Invalid projection ID: {}".format(proj_id))
 
         self.db.print_seats(int(proj_id))
         return int(proj_id)
@@ -54,7 +78,7 @@ class CinemaCLI:
     def make_reservation(self):
         name, tickets_count = self.input_user_and_tickets()
         movie_id = self.choose_movie_id()
-        proj_id = self.choose_proj_id()
+        proj_id = self.choose_proj_id(movie_id)
         seats = self.choose_seats(tickets_count)
 
         self.print_reservation(movie_id, proj_id, seats)

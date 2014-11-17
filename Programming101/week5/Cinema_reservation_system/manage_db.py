@@ -1,18 +1,22 @@
 import sqlite3
+import os
 
 
 class ManageDB:
     MAX_SPOTS = 100
 
     def __init__(self, file_name):
+        db_exists = os.path.isfile(os.getcwd() + "/" + file_name)
+
         self.connect = sqlite3.connect(file_name)
         self.connect.row_factory = sqlite3.Row
         self.cursor = self.connect.cursor()
 
-        self.create_tables()
-        self.fill_movies()
-        self.fill_projections()
-        self.fill_reservations()
+        if not db_exists:
+            self.create_tables()
+            self.fill_movies()
+            self.fill_projections()
+            self.fill_reservations()
 
     def __del__(self):
         self.connect.close()
@@ -148,6 +152,8 @@ class ManageDB:
 def main():
     cinema = ManageDB("cinema.db")
     #cinema.show_movie_projections(3, "2014-04-01")
+    cinema.show_reservations()
+    cinema.show_movies()
 
 
 if __name__ == '__main__':

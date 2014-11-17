@@ -10,9 +10,9 @@ class ManageDB:
         self.cursor = self.connect.cursor()
 
         self.create_tables()
-        self.add_movies()
-        self.add_projections()
-        self.add_reservations()
+        self.fill_movies()
+        self.fill_projections()
+        self.fill_reservations()
 
     def __del__(self):
         self.connect.close()
@@ -35,7 +35,7 @@ class ManageDB:
 
         self.connect.commit()
 
-    def add_movies(self):
+    def fill_movies(self):
         movies = [("The Hunger Games: Catching Fire", 7.9),
                   ("Wreck-It Ralph", 7.8),
                   ("Her", 8.3)]
@@ -43,7 +43,7 @@ class ManageDB:
             VALUES(?,?);''', movies)
         self.connect.commit()
 
-    def add_projections(self):
+    def fill_projections(self):
         projections = [(1, "3D", "2014-04-01", "19:10"),
                        (1, "2D", "2014-04-01", "19:00"),
                        (1, "4DX", "2014-04-02", "21:00"),
@@ -55,7 +55,7 @@ class ManageDB:
             VALUES(?,?,?,?);''', projections)
         self.connect.commit()
 
-    def add_reservations(self):
+    def fill_reservations(self):
         reservations = [("RadoRado", 1, 2, 1), ("RadoRado", 1, 3, 5),
                         ("RadoRado", 1, 7, 8), ("Ivo", 3, 1, 1),
                         ("Ivo", 3, 1, 2), ("Mysterious", 5, 2, 3),
@@ -101,10 +101,53 @@ class ManageDB:
             for item in selection:
                 print(output.format(item['id'], item['time'], item['type']))
 
+    def get_taken_seats_for_projection(self, proj_id):
+        selection = self.cursor.execute('''SELECT reservations.row,
+            reservations.col FROM reservations INNER JOIN projections
+            ON  reservations.projections_id = projections.id
+            WHERE projections.id = ?;''', (proj_id,)).fetchall()
+        return selection
+
+    def print_seats(self, proj_id):
+        selection = self.get_taken_seats_for_projection(proj_id)
+
+        seats = ""
+        seats += "   1 2 3 4 5 6 7 8 9 10\n"
+        for x in range(1, 11):
+            seats += str(x) + (" " if x == 10 else "  ")
+            for y in range(1, 11):
+                seat_taken = False
+                for pos in selection:
+                    if x == pos["row"] and y == pos["col"]:
+                        seat_taken = True
+                        break
+                if seat_taken:
+                    seats += "X "
+                else:
+                    seats += ". "
+            seats += "\n" if x != 10 else ""
+        print(seats)
+
+    def add_reservation(self, username, proj_id, row, col):
+        self.cursor.execute('''INSERT INTO
+            reservations(username, projections_id, row, col)
+            VALUES(?, ?, ?, ?)''', (username, proj_id, row, col))
+        self.connect.commit()
+
+    def make_reservation(self):
+        pass
+
+    def show_reservations(self):
+        selection = self.cursor.execute('''SELECT
+         * from reservations;''').fetchall()
+        for e in selection:
+            print(e["id"], e["username"], e["projections_id"],
+                  e["row"], e["col"])
+
 
 def main():
     cinema = ManageDB("cinema.db")
-    cinema.show_movie_projections(2, None)
+    #cinema.show_movie_projections(3, "2014-04-01")
 
 
 if __name__ == '__main__':

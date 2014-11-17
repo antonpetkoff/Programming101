@@ -8,12 +8,7 @@ def main_menu():
         command = input("$$$>")
 
         if command == 'register':
-            username = input("Enter your username: ")
-            password = input("Enter your password: ")
-
-            sql_manager.register(username, password)
-
-            print("Registration Successfull")
+            handle_registration()
 
         elif command == 'login':
             username = input("Enter your username: ")
@@ -63,6 +58,30 @@ def logged_menu(logged_user):
             print("changepass - for changing passowrd")
             print("change-message - for changing users message")
             print("show-message - for showing users message")
+
+
+def handle_registration():
+    while True:
+        username = input("Enter your username: ")
+        password = input("Enter your password: ")
+
+        if len(username) < 8:
+            print("Username must have more than 8 symbols!")
+            continue
+        """elif username.hasCapital():
+            print("Username must have CAPITAL letters!")
+            continue
+        elif username.hasNumbers():
+            print("Username must have NUMBERS!")
+            continue
+        elif password.isSubstringOf(username):
+            print("Username must NOT contain password as a substring!")
+            continue
+        else:
+            break"""
+
+    sql_manager.register(username, password)
+    print("Registration Successfull")
 
 
 def main():

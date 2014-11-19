@@ -5,14 +5,18 @@ from reservation import Reservation
 from connection import Base
 from connection import engine
 from sqlalchemy.orm import Session
+import os
 
 
 class Cinema:
     def __init__(self):
+        db_exists = os.path.isfile(os.getcwd() + "/cinema.db")
+
         Base.metadata.create_all(engine)
         self.session = Session(bind=engine)
 
-        self.__fill_db()
+        if not db_exists:
+            self.__fill_db()
 
     def add_movie(self, name, rating):
         self.session.add(Movie(name=name, rating=rating))
@@ -27,6 +31,21 @@ class Cinema:
         r = Reservation(username=user, projection_id=proj_id, row=row, col=col)
         self.session.add(r)
         self.session.commit()
+
+    def show_movies(self):
+        movies = self.session.query(Movie).all()
+        return movies
+
+    def show_projections(self, movie_id, date):
+
+        if date is None:
+            result = self.session.query(Projection).\
+                filter(Projection.movie_id == movie_id).all()
+        else:
+            result = self.session.query(Projection).\
+                filter(Projection.movie_id == movie_id).\
+                filter(Projection.date == date).all()
+        return result
 
     def __fill_db(self):
         movies = [("The Hunger Games: Catching Fire", 7.9),
@@ -53,6 +72,9 @@ class Cinema:
 
 def main():
     cinema = Cinema()
+    #print(cinema.show_movies())
+    print(cinema.show_projections(1, None))
+    print(cinema.show_projections(1, "2014-04-01"))
 
 
 if __name__ == '__main__':

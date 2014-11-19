@@ -12,4 +12,4 @@ class Movie(Base):
         return "[{}] - {} ({})".format(self.id, self.name, self.rating)
 
     def __repr__(self):
-        print(str(self))
+        return self.__str__()

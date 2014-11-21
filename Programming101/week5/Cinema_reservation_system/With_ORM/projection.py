@@ -14,7 +14,8 @@ class Projection(Base):
     movie = relationship("Movie", backref="projections")
 
     def __str__(self):
-        return "[{}] - {} {} ({})".format(self.id, self.date, self.time, self.type)
+        return "[{}] - {} {} ({})"\
+            .format(self.id, self.date, self.time, self.type)
 
     def __repr__(self):
         return self.__str__()

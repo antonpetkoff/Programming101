@@ -36,8 +36,7 @@ class Cinema:
         movies = self.session.query(Movie).all()
         return movies
 
-    def show_projections(self, movie_id, date):
-
+    def show_movie_projections(self, movie_id, date):
         if date is None:
             result = self.session.query(Projection).\
                 filter(Projection.movie_id == movie_id).all()

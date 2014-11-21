@@ -32,6 +32,17 @@ class Cinema:
         self.session.add(r)
         self.session.commit()
 
+    def get_reservations_for_name(self, name):
+        reservations = self.session.query(Reservation)\
+            .filter(Reservation.username == name).all()
+        return reservations
+
+    def cancel_reservation(self, reservation):
+        username = reservation.username
+        self.session.delete(reservation)
+        self.session.commit()
+        print("Reservation for {} canceled!".format(username))
+
     def show_movies(self):
         movies = self.session.query(Movie).all()
         return movies
@@ -42,8 +53,8 @@ class Cinema:
                 filter(Projection.movie_id == movie_id).all()
         else:
             result = self.session.query(Projection).\
-                filter(Projection.movie_id == movie_id).\
-                filter(Projection.date == date).all()
+                filter(Projection.movie_id == movie_id,
+                       Projection.date == date).all()
         return result
 
     def __fill_db(self):
@@ -74,12 +85,13 @@ class Cinema:
         help += "help\nexit"
         return help
 
+    def print_list(self, list):
+        for elem in list:
+            print(elem)
+
 
 def main():
     cinema = Cinema()
-    #print(cinema.show_movies())
-    print(cinema.show_projections(1, None))
-    print(cinema.show_projections(1, "2014-04-01"))
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 from cinema import Cinema
+import sys
 
 
 class CommandParser:
@@ -10,8 +11,10 @@ class CommandParser:
 
     def handle_command(self, command):
         args = command.split(" ")
-        print(args[1:])
         print(self.commands[args[0]](*args[1:]))
+
+    def exit(self):
+        sys.exit("Closing Pandora\'s Box!")
 
 
 def main():
@@ -21,6 +24,8 @@ def main():
     command_parser.add_command("show_movies", cinema.show_movies)
     command_parser.add_command("show_movie_projections",
                                cinema.show_movie_projections)
+    command_parser.add_command("help", cinema.get_help)
+    command_parser.add_command("exit", command_parser.exit)
 
     while True:
         command = input("> ")

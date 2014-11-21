@@ -112,7 +112,7 @@ class CinemaCLI:
     def print_help(self):
         print("show_movies")
         print("show_movie_projections <movie_id> [date]")
-        print("nmake_reservation")
+        print("make_reservation")
         print("cancel_reservation <name>")
         print("help")
         print("exit")

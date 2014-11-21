@@ -36,7 +36,7 @@ class Cinema:
         movies = self.session.query(Movie).all()
         return movies
 
-    def show_movie_projections(self, movie_id, date):
+    def show_movie_projections(self, movie_id, date=None):
         if date is None:
             result = self.session.query(Projection).\
                 filter(Projection.movie_id == movie_id).all()
@@ -67,6 +67,12 @@ class Cinema:
             self.add_projection(*projection)
         for reservation in reservations:
             self.add_reservation(*reservation)
+
+    def get_help(self):
+        help = "show_movies\nshow_movie_projections <movie_id> [date]\n"
+        help += "make_reservation <name>\ncancel_reservation <name>\n"
+        help += "help\nexit"
+        return help
 
 
 def main():

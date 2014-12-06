@@ -5,6 +5,7 @@ from question import Question
 class GameCLI:
     def __init__(self):
         self.db = DBManager()
+        self.player_name = ''
 
     def game_start_up(self):
         first_msg = 'Welcome to the \"Do you even math?\" game!\n'
@@ -12,11 +13,27 @@ class GameCLI:
         print(first_msg)
 
         player_name = input('Enter your playername> ')
+        self.player_name = player_name
         self.db.add_player(player_name)
         print('Welcome {}! Let the game begin!'.format(player_name))
 
     def answer_questions(self):
-        print('Answer questions!')
+        counter = 0
+
+        while True:
+            question = Question()
+            print('Question #{}:'.format(counter + 1))
+            print(question.text)
+            answer = input('?> ')
+            if answer == str(question.correct_answer):
+                print('Correct!')
+                counter += 1
+            else:
+                msg = 'Incorrect! Ending game. '
+                msg += 'Your score is: {}'.format(counter)
+                print(msg)
+                self.db.update_score(self.player_name, counter * counter)
+                break
 
     def main_loop(self):
         self.game_start_up()

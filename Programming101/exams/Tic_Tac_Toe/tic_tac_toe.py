@@ -19,12 +19,26 @@ class TicTacToe:
         return template.format(*board_as_list)[:-1]     # cut the last \n
 
     def prompt_user_mark(self):
-        pass
+        while True:
+            command = input('Enter X,Y coordinates for your move: ')
+            coords = list(filter(lambda x: x.isdigit(), list(command)))
+            pos = [int(char) for char in coords]
+            print(pos)
+
+            if len(coords) != 2:
+                print('Error: Enter 2 digits!')
+            elif not(pos[0] in range(1, 4) and pos[1] in range(1, 4)):
+                print('Error: Digits must be in the range [1,3]!')
+            elif self.board[pos[0]-1][pos[1]-1] != ' ':
+                print('Error: Position not available! Choose another!')
+            else:
+                return tuple(pos)
 
 
 def main():
     ttt = TicTacToe()
-    print(ttt.draw_board())
+    result = ttt.prompt_user_mark()
+    print(result)
 
 
 if __name__ == '__main__':

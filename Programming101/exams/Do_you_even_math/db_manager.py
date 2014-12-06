@@ -3,10 +3,6 @@ from connection import engine
 from sqlalchemy.orm import Session
 from player import Player
 
-# generates questions
-# updates players DB
-# highscores function
-
 
 class DBManager:
     def __init__(self):
@@ -46,10 +42,10 @@ class DBManager:
         return msg[:-1]
 
 
-def main():
-    db = DBManager()
-    db.add_player("Dingo")
-    db.update_score("Dingo", 36)
+# def main():
+#     db = DBManager()
+#     db.add_player("Dingo")
+#     db.update_score("Dingo", 36)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

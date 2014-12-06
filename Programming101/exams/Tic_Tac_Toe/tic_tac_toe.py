@@ -23,7 +23,6 @@ class TicTacToe:
             command = input('Enter X,Y coordinates for your move: ')
             coords = list(filter(lambda x: x.isdigit(), list(command)))
             pos = [int(char) for char in coords]
-            print(pos)
 
             if len(coords) != 2:
                 print('Error: Enter 2 digits!')
@@ -33,6 +32,9 @@ class TicTacToe:
                 print('Error: Position not available! Choose another!')
             else:
                 return tuple(pos)
+
+    def ai_turn(self):      # returns tuple(pos)
+        pass
 
 
 def main():

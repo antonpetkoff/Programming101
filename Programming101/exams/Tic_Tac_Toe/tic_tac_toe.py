@@ -3,7 +3,7 @@ from functools import reduce
 
 class TicTacToe:
     def __init__(self):
-        self.board = [[" ", " ", " "] for i in range(3)]
+        self.board = [[' ', ' ', ' '] for i in range(3)]
 
     def play_game(self):
         pass
@@ -13,10 +13,10 @@ class TicTacToe:
 
     def draw_board(self):
         board_as_list = reduce(lambda a, b: a+b, self.board, [])
-        row_splitter = "---|---|---\n"
-        row = " {} | {} | {} \n"
-        board_template = row + row_splitter + row + row_splitter + row
-        return board_template.format(*board_as_list)
+        row_splitter = '---|---|---\n'
+        row = ' {} | {} | {} \n'
+        template = row + row_splitter + row + row_splitter + row
+        return template.format(*board_as_list)[:-1]     # cut the last \n
 
     def prompt_user_mark(self):
         pass

@@ -25,15 +25,20 @@ class GameCLI:
             print('Question #{}:'.format(counter + 1))
             print(question.text)
             answer = input('?> ')
+
             if answer == str(question.correct_answer):
                 print('Correct!')
                 counter += 1
             else:
+                score = counter * counter
                 msg = 'Incorrect! Ending game. '
-                msg += 'Your score is: {}'.format(counter)
+                msg += 'Your score is: {}'.format(score)
                 print(msg)
-                self.db.update_score(self.player_name, counter * counter)
-                break
+
+                if self.db.is_score_better(self.player_name, score):
+                    self.db.update_score(self.player_name, score)
+
+                return
 
     def main_loop(self):
         self.game_start_up()
@@ -43,6 +48,7 @@ class GameCLI:
 
             if command == 'start':
                 self.answer_questions()
+                break
             elif command == 'highscores':
                 print(self.db.get_highscores())
             elif command == 'quit':

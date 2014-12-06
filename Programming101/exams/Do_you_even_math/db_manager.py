@@ -41,11 +41,7 @@ class DBManager:
 
         return msg[:-1]
 
-
-# def main():
-#     db = DBManager()
-#     db.add_player("Dingo")
-#     db.update_score("Dingo", 36)
-
-# if __name__ == '__main__':
-#     main()
+    def is_score_better(self, name, score):
+        player = self.session.query(Player).\
+            filter(Player.name == name).first()
+        return score > player.score

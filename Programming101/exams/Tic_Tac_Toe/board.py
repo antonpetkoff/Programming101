@@ -1,5 +1,4 @@
 from functools import reduce
-from random import shuffle
 from copy import deepcopy
 import numpy
 
@@ -116,23 +115,3 @@ class Board:
             return max(scores) if self.is_user_turn else min(scores)
 
         return scores.index(max(scores))
-
-
-def main():
-    board = Board()
-
-    moves = board.get_available_moves()
-    shuffle(moves)
-    for i in range(len(moves[:-4])):
-        if i % 2 == 0:
-            board.make_move(Board.USER, *moves[i])
-        else:
-            board.make_move(Board.AI, *moves[i])
-
-    print(board.draw_board())
-    best_turn = board.minimax(board, 0, None, True)
-    print(best_turn)
-    print(board.get_available_moves()[best_turn])
-
-if __name__ == '__main__':
-    main()

@@ -38,10 +38,17 @@ class BoardTests(unittest.TestCase):
         self.__fill_rows(range(3), Board.USER)
         self.assertTrue(self.board.is_complete())
 
-    def test_has_3_equal_marks(self):
-        self.assertFalse(self.board._has_3_equal_marks(self.board.state[0]))
+    def test_has_3_equal_marks_all_outcomes(self):
+        self.assertEqual(self.board._has_3_equal_marks(self.board.state[0]),
+                         None)
+
         self.__fill_rows(range(1), Board.USER)
-        self.assertTrue(self.board._has_3_equal_marks(self.board.state[0]))
+        self.assertEqual(self.board._has_3_equal_marks(self.board.state[0]),
+                         Board.USER_WIN)
+
+        self.__fill_rows(range(1), Board.AI)
+        self.assertEqual(self.board._has_3_equal_marks(self.board.state[0]),
+                         Board.AI_WIN)
 
     def test_is_game_over_all_outcomes(self):
         self.assertEqual(self.board.is_game_over(), None)

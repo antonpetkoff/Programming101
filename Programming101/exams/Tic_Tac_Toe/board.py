@@ -1,9 +1,9 @@
 from functools import reduce
+from random import randint
+import numpy
 
-# is game won? check vertical, horizontal, diagonal triplets
 # check for score
-# state
-# available moves; empty (x,y) tuples
+# states
 
 
 class Board:
@@ -31,16 +31,50 @@ class Board:
                     tuples.append((x, y))
         return tuples
 
+    def is_complete(self):
+        for row in self.state:
+            if ' ' in row:
+                return False
+        return True
+
+    def _has_3_equal_marks(self, list, mark):    # helper method
+        return list[0] == mark and list[1] == mark and list[2] == mark
+
+    def is_game_won(self, mark):
+        n = 3
+        main_diagonal = []
+        secondary_diagonal = []
+        transposed = numpy.matrix(self.state).transpose().tolist()
+
+        for row in transposed:
+            if self._has_3_equal_marks(row, mark):            # check columns
+                return True
+
+        for x in range(n):
+            if self._has_3_equal_marks(self.state[x], mark):  # check rows
+                return True
+            for y in range(n):
+                if x == y:
+                    main_diagonal.append(self.state[x][y])
+                if x + y == n - 1:
+                    secondary_diagonal.append(self.state[x][y])
+
+        if self._has_3_equal_marks(main_diagonal, mark) or\
+           self._has_3_equal_marks(secondary_diagonal, mark):   # diagonals
+            return True
+
+        return False
+
 
 def main():
     board = Board()
-    board.make_move('X', 0, 0)
-    board.make_move('O', 2, 1)
-    print(board.is_pos_empty(1, 1))
-    print(board.is_pos_empty(2, 1))
-    available_moves = board.get_available_moves()
-    print(available_moves)
-    board.make_move('X', *available_moves[0])
+
+    moves = board.get_available_moves()
+    for pos in moves:
+        if randint(1, 2) == 1:
+            board.make_move('X', *pos)
+        else:
+            board.make_move('O', *pos)
     print(board.draw_board())
 
 if __name__ == '__main__':

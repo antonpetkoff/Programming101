@@ -1,5 +1,4 @@
 from functools import reduce
-from random import randint
 from random import shuffle
 from copy import deepcopy
 import numpy
@@ -27,7 +26,7 @@ class Board:
         row_splitter = '---|---|---\n'
         row = ' {} | {} | {} \n'
         template = row + row_splitter + row + row_splitter + row
-        return template.format(*board_as_list)[:-1]     # cut the last \n
+        return template.format(*board_as_list)
 
     def is_pos_in_range(self, x, y):
         return (x in range(3) and y in range(3))
@@ -112,13 +111,11 @@ class Board:
         scores = []
         for move in board.get_available_moves():
             scores.append(board.minimax(deepcopy(board), depth, move))
-            #print(scores)
 
         if len(scores) == 0:
             return board.get_score(depth)
 
         if not first_call:
-            #print("if not first_call: ", scores)
             return max(scores) if self.is_user_turn else min(scores)
 
         return scores.index(max(scores))

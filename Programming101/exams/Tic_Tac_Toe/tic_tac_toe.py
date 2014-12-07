@@ -8,20 +8,26 @@ class TicTacToe:
     def main_loop(self):
         pass
 
-    def prompt_user_mark(self):
+    def prompt_integer(self, msg):
         while True:
-            command = input('Enter X,Y coordinates for your move: ')
-            coords = list(filter(lambda x: x.isdigit(), list(command)))
-            pos = [int(char) for char in coords]
+            command = input('Enter {} digit: '.format(msg))
 
-            if len(coords) != 2:
-                print('Error: Enter 2 digits!')
-            elif not(pos[0] in range(1, 4) and pos[1] in range(1, 4)):
-                print('Error: Digits must be in the range [1,3]!')
-            elif not self.board.is_pos_empty(pos[0]-1, pos[1]-1):
+            if (len(command) != 1) or (not command.isdigit()) or\
+               (not int(command) in range(1, 4)):
+                print('Error: Enter 1 digit in the range [1,3]')
+            else:
+                return int(command)
+
+    def prompt_user_mark(self):
+        print('Enter X,Y coordinates for your move:')
+        while True:
+            x = self.prompt_integer('row')
+            y = self.prompt_integer('column')
+
+            if not self.board.is_pos_empty(x - 1, y - 1):
                 print('Error: Position not available! Choose another!')
             else:
-                return tuple(pos)
+                return (x, y)
 
 
 def main():

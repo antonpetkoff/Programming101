@@ -37,8 +37,8 @@ class TicTacToe:
     def main_loop(self):
         print('Welcome to Tic-Tac-Toe!')
         print(self.board.draw_board())
-        is_game_over = None
-        while is_game_over is None:
+        is_game_over = Board.NOT_OVER
+        while is_game_over is Board.NOT_OVER:
             if self.board.is_user_turn:
                 pos = self.prompt_user_mark()
                 self.board.make_move(Board.USER, *pos)

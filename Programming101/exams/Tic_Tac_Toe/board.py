@@ -7,9 +7,9 @@ class Board:
     EMPTY = ' '
     USER = 'X'
     AI = 'O'
-    USER_WIN = 1
-    AI_WIN = -1
-    DRAW = 0
+    USER_WIN = 3
+    AI_WIN = -3
+    DRAW = 1
     NOT_OVER = None
 
     def __init__(self):
@@ -84,7 +84,7 @@ class Board:
 
         if self.is_complete():
             return Board.DRAW
-        return None
+        return Board.NOT_OVER
 
     def get_score(self, depth):
         if self.is_game_over() == self.USER_WIN:
@@ -93,6 +93,7 @@ class Board:
             return 10 - depth
         return 0
 
+    # artificial intelligence
     def minimax(self, board, depth, move=None, first_call=False):
         if move is not None:
             if board.is_user_turn:

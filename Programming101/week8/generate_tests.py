@@ -4,18 +4,6 @@ class TestsGenerator:
         self.dsl_file_name = dsl_file_name
         self.dsl_text = self._read_file(dsl_file_name)
 
-    def compose(self, f, g):
-        return lambda x: f(g(x))
-
-    def compose_all(self, functions):
-        result = self.compose(functions[0], functions[1])
-        functions = functions[2:]
-
-        for f in functions:
-            functions = self.compose(result, f)     # reads funcitons from right to left
-
-        return result
-
     def _read_file(self, file_name):
         contents = ""
         with open(file_name) as read_file:
@@ -27,13 +15,15 @@ class TestsGenerator:
             write_file.write(text)
 
     def generate_file_name(self):
-        self.dsl_file_name.split("_")
+        words = self.dsl_file_name[:-4].split("_")
+        print(words)
         # work in progress
 
     def write_tests(self):
         template = "teststests tests"
         file_name = self.generate_file_name()
         self._write_file(file_name, template)
+
 """
 import unittest
 
@@ -58,7 +48,8 @@ if __name__ == '__main__':
 
 
 def main():
-    pass
+    tg = TestsGenerator('is_prime_test.dsl')
+    tg.generate_file_name()
 
 
 if __name__ == '__main__':

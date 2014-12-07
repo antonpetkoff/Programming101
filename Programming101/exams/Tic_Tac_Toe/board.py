@@ -1,5 +1,6 @@
 from functools import reduce
 from random import randint
+from random import shuffle
 from copy import deepcopy
 import numpy
 
@@ -111,8 +112,13 @@ class Board:
         scores = []
         for move in board.get_available_moves():
             scores.append(board.minimax(deepcopy(board), depth, move))
+            #print(scores)
+
+        if len(scores) == 0:
+            return board.get_score(depth)
 
         if not first_call:
+            #print("if not first_call: ", scores)
             return max(scores) if self.is_user_turn else min(scores)
 
         return scores.index(max(scores))
@@ -121,12 +127,14 @@ class Board:
 def main():
     board = Board()
 
-    moves = board.get_available_moves()[:-5]
-    for pos in moves:
-        if randint(1, 2) == 1:
-            board.make_move(Board.USER, *pos)
+    moves = board.get_available_moves()
+    shuffle(moves)
+    for i in range(len(moves[:-4])):
+        if i % 2 == 0:
+            board.make_move(Board.USER, *moves[i])
         else:
-            board.make_move(Board.AI, *pos)
+            board.make_move(Board.AI, *moves[i])
+
     print(board.draw_board())
     best_turn = board.minimax(board, 0, None, True)
     print(best_turn)

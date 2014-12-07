@@ -28,9 +28,6 @@ class Board:
         template = row + row_splitter + row + row_splitter + row
         return template.format(*board_as_list)
 
-    def is_pos_in_range(self, x, y):
-        return (x in range(3) and y in range(3))
-
     def is_pos_empty(self, x, y):
         return self.state[x][y] == self.EMPTY
 

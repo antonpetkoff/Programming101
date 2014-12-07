@@ -50,7 +50,7 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(self.board._has_3_equal_marks(self.board.state[0]),
                          Board.AI_WIN)
 
-    def test_is_game_over_all_outcomes(self):
+    def test_is_game_over_all_outcomes_rows(self):
         self.assertEqual(self.board.is_game_over(), None)
 
         self.__fill_rows(range(1), Board.USER)
@@ -63,6 +63,36 @@ class BoardTests(unittest.TestCase):
                             [Board.AI,   Board.AI,   Board.USER],
                             [Board.USER, Board.AI,   Board.USER]]
         self.assertEqual(self.board.is_game_over(), Board.DRAW)
+
+    def test_is_game_over_diagonals(self):
+        self.board.state = [[Board.USER, Board.EMPTY, Board.AI],
+                            [Board.AI,   Board.USER,  Board.AI],
+                            [Board.USER, Board.AI,    Board.USER]]
+        self.assertEqual(self.board.is_game_over(), Board.USER_WIN)
+
+        self.board.state = [[Board.USER, Board.USER, Board.AI],
+                            [Board.AI,   Board.AI,   Board.USER],
+                            [Board.AI,   Board.USER, Board.EMPTY]]
+        self.assertEqual(self.board.is_game_over(), Board.AI_WIN)
+
+    def test_is_game_over_columns(self):
+        self.board.state = [[Board.USER, Board.EMPTY, Board.AI],
+                            [Board.USER, Board.AI,    Board.USER],
+                            [Board.USER, Board.AI,    Board.AI]]
+        self.assertEqual(self.board.is_game_over(), Board.USER_WIN)
+
+    def test_get_score_all_outcomes(self):
+        self.assertEqual(self.board.get_score(5), 0)
+
+        self.board.state = [[Board.USER, Board.EMPTY, Board.AI],
+                            [Board.USER, Board.AI,    Board.USER],
+                            [Board.USER, Board.AI,    Board.AI]]
+        self.assertEqual(self.board.get_score(3), -7)
+
+        self.board.state = [[Board.USER, Board.USER, Board.AI],
+                            [Board.AI,   Board.AI,   Board.USER],
+                            [Board.AI,   Board.USER, Board.EMPTY]]
+        self.assertEqual(self.board.get_score(2), 8)
 
 
 if __name__ == '__main__':

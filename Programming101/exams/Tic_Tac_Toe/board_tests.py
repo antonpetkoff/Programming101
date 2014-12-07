@@ -6,10 +6,10 @@ class BoardTests(unittest.TestCase):
     def setUp(self):
         self.board = Board()
 
-    def __fill_rows(self, rows):
+    def __fill_rows(self, rows, mark):
         for row in rows:
             for col in range(3):
-                self.board.make_move(Board.USER, row, col)
+                self.board.make_move(mark, row, col)
 
     def test_is_user_turn(self):
         self.assertTrue(self.board.is_user_turn)
@@ -17,7 +17,7 @@ class BoardTests(unittest.TestCase):
         self.assertFalse(self.board.is_user_turn)
 
     def test_make_move(self):
-        self.__fill_rows(range(1))
+        self.__fill_rows(range(1), Board.USER)
         self.assertEqual(self.board.state[0], [Board.USER]*3)
 
     def test_is_pos_empty(self):
@@ -26,7 +26,7 @@ class BoardTests(unittest.TestCase):
         self.assertFalse(self.board.is_pos_empty(0, 0))
 
     def test_get_available_moves(self):
-        self.__fill_rows(range(1))
+        self.__fill_rows(range(1), Board.USER)
         result = []
         for row in range(1, 3):
             for col in range(0, 3):
@@ -35,8 +35,27 @@ class BoardTests(unittest.TestCase):
 
     def test_is_complete(self):
         self.assertFalse(self.board.is_complete())
-        self.__fill_rows(range(3))
+        self.__fill_rows(range(3), Board.USER)
         self.assertTrue(self.board.is_complete())
+
+    def test_has_3_equal_marks(self):
+        self.assertFalse(self.board._has_3_equal_marks(self.board.state[0]))
+        self.__fill_rows(range(1), Board.USER)
+        self.assertTrue(self.board._has_3_equal_marks(self.board.state[0]))
+
+    def test_is_game_over_all_outcomes(self):
+        self.assertEqual(self.board.is_game_over(), None)
+
+        self.__fill_rows(range(1), Board.USER)
+        self.assertEqual(self.board.is_game_over(), Board.USER_WIN)
+
+        self.__fill_rows(range(1), Board.AI)
+        self.assertEqual(self.board.is_game_over(), Board.AI_WIN)
+
+        self.board.state = [[Board.USER, Board.USER, Board.AI],
+                            [Board.AI,   Board.AI,   Board.USER],
+                            [Board.USER, Board.AI,   Board.USER]]
+        self.assertEqual(self.board.is_game_over(), Board.DRAW)
 
 
 if __name__ == '__main__':

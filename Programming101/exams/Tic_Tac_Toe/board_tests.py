@@ -96,7 +96,7 @@ class BoardTests(unittest.TestCase):
         self.assertEqual(self.board.get_score(2), 8)
 
     def test_minimax(self):
-        tests_count = 10
+        tests_count = 5
         results = []
 
         for test in range(tests_count):

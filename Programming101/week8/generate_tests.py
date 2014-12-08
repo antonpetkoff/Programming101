@@ -32,8 +32,11 @@ class TestsGenerator:
         return '\n'.join(imports)
 
     def generate_docstring(self):
-        doc_str = filter(lambda x: x[0] == '\"' and x[-1] == '\"', self.lines)
-        return '\"\"' + str(list(doc_str)[0]) + '\"\"'
+        doc_str = list(filter(lambda x: x[0] == '\"' and
+                              x[-1] == '\"', self.lines))
+        if len(doc_str) == 0:
+            return ''
+        return '    \"\"' + str(doc_str[0]) + '\"\"'
 
     def generate_test_cases_all(self):
         quoted = filter(lambda x: x[0] == '\"', self.lines)
@@ -43,6 +46,8 @@ class TestsGenerator:
         for i in range(len(assertions)):
             test_cases += self.generate_test_case(assertions[i], i + 1) + '\n'
 
+        if len(test_cases) == 0:
+            return '    pass\n'
         return test_cases[:-1]
 
     def generate_boolean_test_case(self, id, lhs, rhs, comment):
@@ -74,7 +79,7 @@ class TestsGenerator:
 
     def generate_script_source(self):
         template = "import unittest\n\n{}\n\n\nclass {}(unittest.TestCase):\n"
-        template += "    {}\n\n{}\nif __name__ == '__main__':\n"
+        template += "{}\n{}\nif __name__ == '__main__':\n"
         template += "    unittest.main()\n"
 
         imports = self.generate_imports()

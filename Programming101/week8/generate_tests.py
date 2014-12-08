@@ -26,6 +26,11 @@ class TestsGenerator:
         class_name = str(reduce(lambda a, b: a + b, capital)) + 's'
         return class_name
 
+    def generate_imports(self):
+        imports = filter(lambda x: x.startswith('from') or
+                         x.startswith('import'), self.lines)
+        return '\n'.join(imports)
+
     def write_tests(self):
         template = "teststests tests"
         file_name = self.generate_file_name()
@@ -34,7 +39,7 @@ class TestsGenerator:
 
 def main():
     tg = TestsGenerator('is_prime_test.dsl')
-    print(tg.generate_class_name())
+    print(tg.generate_imports())
 
 
 if __name__ == '__main__':

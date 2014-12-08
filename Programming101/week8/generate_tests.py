@@ -57,7 +57,7 @@ class TestsGenerator:
         return pattern.format(id, 'self.assertEqual', rhs, lhs, comment)
 
     def generate_test_case(self, line, id):
-        unquoted = line.split('\"')
+        unquoted = line.replace(', ', ',').split('\"')
         comment = '\"' + str(unquoted[1]) + '\"'
 
         assertion = unquoted[-1].split(' ')     # remove comment

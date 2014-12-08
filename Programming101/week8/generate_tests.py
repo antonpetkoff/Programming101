@@ -1,4 +1,5 @@
 from functools import reduce
+import sys
 
 
 class TestsGenerator:
@@ -8,9 +9,12 @@ class TestsGenerator:
 
     def _read_file_lines(self, file_name):
         contents = ""
-        with open(file_name, 'r') as read_file:
-            contents = read_file.read().strip().split('\n')
-            contents = list(filter(lambda x: x != '', contents))
+        try:
+            with open(file_name, 'r') as read_file:
+                contents = read_file.read().strip().split('\n')
+                contents = list(filter(lambda x: x != '', contents))
+        except FileNotFoundError:
+            raise
         return contents
 
     def _write_file(self, file_name, text):
@@ -96,8 +100,9 @@ class TestsGenerator:
 
 
 def main():
-    tg = TestsGenerator('is_prime_test.dsl')
+    tg = TestsGenerator(sys.argv[1])
     tg.create_tests_script()
+
 
 if __name__ == '__main__':
     main()

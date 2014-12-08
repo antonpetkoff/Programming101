@@ -40,35 +40,35 @@ class TestsGenerator:
         quoted = filter(lambda x: x[0] == '\"', self.lines)
         test_cases = list(quoted)[1:]
 
-        result = self.generate_test_case(test_cases[1], 2)
+        result = self.generate_test_case(test_cases[0], 1)
         print(result)
 
-    def choose_assertion(self, argument):
-        if argument == 'True':
-            return 'self.assertTrue'
-        elif argument == 'False':
-            return 'self.assertFalse'
-        return 'self.assertEqual'
+    def generate_boolean_test_case(self, id, lhs, rhs, comment):
+        pattern = "    def testCase{}(self):\n        {}({}, {})"
+        if rhs == 'True':
+            return pattern.format(id, 'self.assertTrue', lhs, comment)
+        else:
+            return pattern.format(id, 'self.assertFalse', lhs, comment)
+
+    def generate_equals_test_case(self, id, lhs, rhs, comment):
+        pattern = "    def testCase{}(self):\n        {}({}, {}, {})"
+        return pattern.format(id, 'self.assertEqual', rhs, lhs, comment)
 
     def generate_test_case(self, line, id):
-        pattern = "    def testCase{}(self):\n        {}({}, {})"
         unquoted = line.split('\"')
-        comment = '\"' + str(unquoted[1]) + '\"'    # ok
-        assertion = unquoted[-1].split(' ')     # remove comment
-        rhs = assertion[-1]                     # ok
-        assertion = assertion[:-1]              # remove assert_result
-        temp = filter(lambda x: x != '' and x[0].isalpha(), assertion)
-        lhs = str(list(temp)[0])                # ok
-        assert_type = ''
+        comment = '\"' + str(unquoted[1]) + '\"'
 
-        if rhs == 'True':
-            assert_type = 'self.assertTrue'
-            return pattern.format(id, assert_type, lhs, comment)
-        elif rhs == 'False':
-            assert_type = 'self.assertFalse'
-            return pattern.format(id, assert_type, lhs, comment)
+        assertion = unquoted[-1].split(' ')     # remove comment
+        rhs = assertion[-1]
+
+        assertion = assertion[:-1]              # remove rhs
+        temp = filter(lambda x: x != '' and x[0].isalpha(), assertion)
+        lhs = str(list(temp)[0])
+
+        if rhs == 'True' or rhs == 'False':
+            return self.generate_boolean_test_case(id, lhs, rhs, comment)
         else:
-            assert_type = 'self.assertEqual'
+            return self.generate_equals_test_case(id, lhs, rhs, comment)
 
     def write_tests(self):
         template = "teststests tests"

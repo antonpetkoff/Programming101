@@ -1,4 +1,5 @@
 from functools import reduce
+import re
 
 
 class TestsGenerator:
@@ -31,6 +32,44 @@ class TestsGenerator:
                          x.startswith('import'), self.lines)
         return '\n'.join(imports)
 
+    def generate_docstring(self):
+        doc_str = filter(lambda x: x[0] == '\"' and x[-1] == '\"', self.lines)
+        return '\"\"' + str(list(doc_str)[0]) + '\"\"'
+
+    def generate_test_cases_all(self):
+        quoted = filter(lambda x: x[0] == '\"', self.lines)
+        test_cases = list(quoted)[1:]
+
+        result = self.generate_test_case(test_cases[1], 2)
+        print(result)
+
+    def choose_assertion(self, argument):
+        if argument == 'True':
+            return 'self.assertTrue'
+        elif argument == 'False':
+            return 'self.assertFalse'
+        return 'self.assertEqual'
+
+    def generate_test_case(self, line, id):
+        pattern = "    def testCase{}(self):\n        {}({}, {})"
+        unquoted = line.split('\"')
+        comment = '\"' + str(unquoted[1]) + '\"'    # ok
+        assertion = unquoted[-1].split(' ')     # remove comment
+        rhs = assertion[-1]                     # ok
+        assertion = assertion[:-1]              # remove assert_result
+        temp = filter(lambda x: x != '' and x[0].isalpha(), assertion)
+        lhs = str(list(temp)[0])                # ok
+        assert_type = ''
+
+        if rhs == 'True':
+            assert_type = 'self.assertTrue'
+            return pattern.format(id, assert_type, lhs, comment)
+        elif rhs == 'False':
+            assert_type = 'self.assertFalse'
+            return pattern.format(id, assert_type, lhs, comment)
+        else:
+            assert_type = 'self.assertEqual'
+
     def write_tests(self):
         template = "teststests tests"
         file_name = self.generate_file_name()
@@ -39,7 +78,7 @@ class TestsGenerator:
 
 def main():
     tg = TestsGenerator('is_prime_test.dsl')
-    print(tg.generate_imports())
+    print(tg.generate_test_cases_all())
 
 
 if __name__ == '__main__':
@@ -51,7 +90,7 @@ import unittest
 {imports}
 
 class {class_name}(unittest.TestCase):
-    \"\"\"{test_doc}\"\"\"
+    {docstring}
 
     {test_cases}
 
@@ -62,7 +101,7 @@ if __name__ == '__main__':
     def testCase1(self):
         self.assertTrue(is_prime(7), "7 should noot be prime")
 
-    def testCase2(self):
-        self.assertFalse(is_prime(8), "8 should be prime")
+    def testCase{}(self):
+        {}({}, {})
 
 """

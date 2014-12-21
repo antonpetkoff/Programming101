@@ -56,10 +56,10 @@ class Board:
         status = None
         main_diagonal = []
         secondary_diagonal = []
-        transposed = numpy.matrix(self.state).transpose().tolist()
 
-        for row in transposed:                        # check columns
-            status = self._has_3_equal_marks(row)
+        for i in range(n):
+            column = [self.state[0][i], self.state[1][i], self.state[2][i]]
+            status = self._has_3_equal_marks(column)
             if status is not None:
                 return status
 

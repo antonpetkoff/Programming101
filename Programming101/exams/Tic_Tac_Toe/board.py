@@ -1,6 +1,5 @@
 from functools import reduce
 from copy import deepcopy
-import numpy
 
 
 class Board:

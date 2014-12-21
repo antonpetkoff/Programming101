@@ -1,5 +1,4 @@
 import unittest
-from random import randint
 from board import Board
 
 
@@ -94,28 +93,6 @@ class BoardTests(unittest.TestCase):
                             [Board.AI,   Board.AI,   Board.USER],
                             [Board.AI,   Board.USER, Board.EMPTY]]
         self.assertEqual(self.board.get_score(2), 8)
-
-    def test_minimax(self):
-        tests_count = 5
-        results = []
-
-        for test in range(tests_count):
-            is_game_over = Board.NOT_OVER
-            while is_game_over is Board.NOT_OVER:
-                if self.board.is_user_turn:
-                    moves = self.board.get_available_moves()
-                    pos = moves[randint(0, len(moves) - 1)]
-                    self.board.make_move(Board.USER, *pos)
-                else:
-                    moves = self.board.get_available_moves()
-                    best_turn = self.board.minimax(self.board, 0, None, True)
-                    self.board.make_move(Board.AI, *moves[best_turn])
-                is_game_over = self.board.is_game_over()
-
-            results.append(is_game_over)
-            self.board = Board()        # refresh board
-
-        self.assertNotIn(Board.USER_WIN, results)
 
 
 if __name__ == '__main__':

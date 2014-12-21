@@ -1,5 +1,4 @@
 from functools import reduce
-from copy import deepcopy
 
 
 class Board:
@@ -43,7 +42,7 @@ class Board:
                 return False
         return True
 
-    def _has_3_equal_marks(self, list):    # helper method
+    def _has_3_equal_marks(self, list):
         if list == [Board.USER]*3:
             return Board.USER_WIN
         elif list == [Board.AI]*3:
@@ -67,7 +66,7 @@ class Board:
             if status is not None:
                 return status
 
-            for y in range(n):                  # accumulate diagonals
+            for y in range(n):                          # accumulate diagonals
                 if x == y:
                     main_diagonal.append(self.state[x][y])
                 if x + y == n - 1:
@@ -91,27 +90,3 @@ class Board:
         elif self.is_game_over() == self.AI_WIN:
             return 10 - depth
         return 0
-
-    # artificial intelligence
-    def minimax(self, board, depth, move=None, first_call=False):
-        if move is not None:
-            if board.is_user_turn:
-                board.make_move(Board.USER, *move)
-            else:
-                board.make_move(Board.AI, *move)
-
-        if board.is_game_over():
-            return board.get_score(depth)
-
-        depth += 1
-        scores = []
-        for move in board.get_available_moves():
-            scores.append(board.minimax(deepcopy(board), depth, move))
-
-        if len(scores) == 0:
-            return board.get_score(depth)
-
-        if not first_call:
-            return max(scores) if self.is_user_turn else min(scores)
-
-        return scores.index(max(scores))

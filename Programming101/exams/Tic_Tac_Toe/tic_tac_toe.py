@@ -1,4 +1,5 @@
 from board import Board
+from ai import AI
 
 
 class TicTacToe:
@@ -45,8 +46,8 @@ class TicTacToe:
             else:
                 print('AI takes turn...')
                 moves = self.board.get_available_moves()
-                best_turn = self.board.minimax(self.board, 0, None, True)
-                self.board.make_move(Board.AI, *moves[best_turn])
+                best_move = AI(self.board, self.board.is_user_turn).best_move()
+                self.board.make_move(Board.AI, *moves[best_move])
             print(self.board.draw_board())
 
             is_game_over = self.board.is_game_over()
